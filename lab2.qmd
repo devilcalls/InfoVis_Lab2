@@ -8,6 +8,7 @@ editor: visual
 library(tidyverse)
 library(readxl)
 library(waldo)
+library(countrycode)
 
 gdp <- read_xls("API_NY.GDP.PCAP.CD_DS2_en_excel_v2_85284.xls", skip = 3)
 gdp_2019 <- gdp %>% select('Country Name', 'Country Code', gdp = "2019")
@@ -23,9 +24,19 @@ merged_data <- gdp_2019 %>%
   left_join(exp_2019, by = "Country Code") %>%
   left_join(pop_2019, by = "Country Code")
 
-# View  merged data
-print(merged_data)
 
-write_csv(merged_data, "merged_data_2019.csv")
+country_only_data <- merged_data %>%
+  inner_join(codelist, by = c("Country Code" = "wb")) %>%
+  select(`Country Name`, `Country Code`, gdp, exp, pop, continent) %>%
+  rename(
+    'name' = 'Country Name',
+    'code' = 'Country Code',
+    'gdp_per_capita' = 'gdp',
+    'life_exp' = 'exp',
+  )%>%
+  drop_na(continent)%>%
+  drop_na(gdp_per_capita)
+
+print(country_only_data)
 
 ```
