@@ -9,5 +9,23 @@ library(tidyverse)
 library(readxl)
 library(waldo)
 
-gdp <- read_xls()
+gdp <- read_xls("API_NY.GDP.PCAP.CD_DS2_en_excel_v2_85284.xls", skip = 3)
+gdp_2019 <- gdp %>% select('Country Name', 'Country Code', gdp = "2019")
+
+exp <- read_xls("API_SP.DYN.LE00.IN_DS2_en_excel_v2_85119.xls", skip = 3)
+exp_2019 <- exp %>% select('Country Code', exp = "2019")
+
+pop <- read_xls("API_SP.POP.TOTL_DS2_en_excel_v2_85347.xls", skip = 3)
+pop_2019 <- pop %>% select('Country Code', pop = "2019")
+
+# Merge 
+merged_data <- gdp_2019 %>%
+  left_join(exp_2019, by = "Country Code") %>%
+  left_join(pop_2019, by = "Country Code")
+
+# View  merged data
+print(merged_data)
+
+write_csv(merged_data, "merged_data_2019.csv")
+
 ```
