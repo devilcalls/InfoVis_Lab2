@@ -46,3 +46,11 @@ waldo::compare(arr_df, world_ref, tolerance = 1e-12)
 ```
 
 # Task 2
+
+```{R}
+pop_stats = read_xlsx("outputFile.xlsx", sheet = "T4", skip = 10)
+pop_stats_sliced = slice(pop_stats, 26:75) # adjusted for the skip 
+
+```
+
+# Reflection
