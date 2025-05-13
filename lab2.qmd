@@ -5,6 +5,8 @@ editor: visual
 author: "Daniel Lip", "Pierre Chan", Howard Yeo", "Joel Koh", "Jolie Yeo"
 ---
 
+# Task 1
+
 ```{r}
 library(tidyverse)
 library(readxl)
@@ -29,4 +31,18 @@ library("countrycode")
 data(codelist)
 cleaned_codelist <- select(codelist, continent, code=wb)
 combined_df <- inner_join(combined_df, cleaned_codelist, join_by(code))
+
+# sort alphabetically
+arr_df <- arrange(combined_df, name)
+
+# remove na rows
+arr_df <- drop_na(arr_df, gdp_per_capita)
+arr_df <- drop_na(arr_df, continent)
+
+arr_df <- rename(arr_df, gdp_per_cap = gdp_per_capita)
+
+world_ref <- readr::read_csv("country_profiles_2019.csv")
+waldo::compare(arr_df, world_ref, tolerance = 1e-12)
 ```
+
+# Task 2
