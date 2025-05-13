@@ -15,10 +15,18 @@ gdp_2019 <- select(gdp, name = 'Country Name', code = 'Country Code', gdp_per_ca
 gdp_2019
 
 life_exp <- read_xls("API_SP.DYN.LE00.IN_DS2_en_excel_v2_85119.xls", skip=3)
-life_exp_2019 <- select(life_exp, name = 'Country Name', code = 'Country Code', life_exp = '2019')
+life_exp_2019 <- select(life_exp, name = 'Country Name', life_exp = '2019')
 
 pop <- read_xls("API_SP.POP.TOTL_DS2_en_excel_v2_85347.xls", skip=3)
-pop_2019 <- select(pop, name = 'Country Name', code = 'Country Code', pop = '2019')
+pop_2019 <- select(pop, name = 'Country Name', pop = '2019')
 
+# combine the three dataframes together
+combined_df <- inner_join(gdp_2019, life_exp_2019, join_by(name))
+combined_df <- inner_join(combined_df, pop_2019, join_by(name))
 
+# load countrycode
+library("countrycode")
+data(codelist)
+cleaned_codelist <- select(codelist, continent, code=wb)
+combined_df <- inner_join(combined_df, cleaned_codelist, join_by(code))
 ```
