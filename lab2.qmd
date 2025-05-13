@@ -1,0 +1,13 @@
+---
+title: "Lab2"
+format: html
+editor: visual
+---
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(waldo)
+
+gdp <- read_xls()
+```
