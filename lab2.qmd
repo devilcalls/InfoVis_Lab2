@@ -2,7 +2,7 @@
 title: "Lab2"
 format: html
 editor: visual
-author: "Daniel Lip", "Pierre Chan", Howard Yeo", "Joel Koh", "Jolie Yeo"
+author: "Daniel Lip", "Pierre Chan", Howard Yeo", "Joel Koh", "Jolie Yeo" , "Danish Dol"
 ---
 
 # Task 1
@@ -48,9 +48,44 @@ waldo::compare(arr_df, world_ref, tolerance = 1e-12)
 # Task 2
 
 ```{R}
-pop_stats = read_xlsx("outputFile.xlsx", sheet = "T4", skip = 10)
-pop_stats_sliced = slice(pop_stats, 26:75) # adjusted for the skip 
+#task 2.1
+year_row <- read_excel("outputFile.xlsx", sheet = "T4", range = "B11:BQ11", col_names = FALSE)
+years <- as.numeric(as.character(unlist(year_row)))
+raw_data <- read_excel("outputFile.xlsx", sheet = "T4", range = "A37:BQ86", col_names = FALSE)
+colnames(raw_data) <- c("age_group", as.character(years))
+
+#task 2.2
+target_years <- seq(1960, 2020, by = 10)
+
+raw_data <- raw_data %>% mutate(sex = rep(c("Male", "Female"), each = 25)) %>% mutate(across(-c(age_group, sex), as.numeric)) %>% select(age_group, sex, all_of(as.character(target_years)))
+
+#task 2.3
+long_data <- raw_data %>% pivot_longer(cols = -c(age_group, sex), names_to = "year", values_to = "pop") %>% mutate(year = as.numeric(year), age_group = case_when(str_detect(age_group, "Years & Over") ~ paste0(str_extract(age_group, "^\\d+"), " - ", as.numeric(str_extract(age_group, "^\\d+")) + 4), TRUE ~ age_group), age = as.numeric(str_extract(age_group, "^\\d+")))
+
+#task 2.4
+regular_groups <- long_data %>% filter(str_detect(age_group, " - "))
+
+cumulative_groups <- long_data %>% filter(str_detect(age_group, "Years & Over")) %>% mutate(age_group = paste0(str_extract(age_group, "^\\d+"), " - ", as.numeric(str_extract(age_group, "^\\d+")) + 4))
+
+#task 2.5
+final_data <- bind_rows(regular_groups, cumulative_groups) %>% mutate(sex = factor(sex, levels = c("Male", "Female"))) %>% select(age, sex, year, pop, age_group) %>% filter(!is.na(pop), !is.na(age), !is.na(sex), !is.na(year)) %>% arrange(age, sex, year)
+
+final_data_cleaned <- final_data %>% mutate(pop = if_else(age >= 70 & age <= 74, pmax(pop, max(pop[age >= 70 & age <= 74 & str_detect(age_group, "Years & Over")], na.rm = TRUE), na.rm = TRUE), pop)) %>% distinct(age, sex, year, .keep_all = TRUE) %>% select(-age_group) %>% arrange(age, sex, year)
+
+print(final_data_cleaned)
+
+sg_ref <- readr::read_csv("sg_5yr_cohorts.csv", col_types = cols(sex = col_factor(levels = c("Male", "Female"))))
+waldo::compare(final_data_cleaned, sg_ref, tolerance = 1e-12)
 
 ```
 
 # Reflection
+
+1.  **Key takeaway:**
+    -   
+2.  **Challenges:**
+    -   Task 2.3 was the real challenge as it took me a while to understand what is it asking for initially i thought if n - n years exist use these and drop the years & over, and if does not exist such as 90 - 94, we were to convert 90 years & over to it.
+3.  **AI assistance:**
+    -   Used AI tool for task 2.3 on understanding what the task wanted.
+4.  **Teamwork:**
+5.  **Additional feedback** *(optional)*:
