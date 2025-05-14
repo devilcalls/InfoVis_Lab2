@@ -1,13 +1,14 @@
 ---
-title: "Lab2"
+title: "Week 2 Lab - Tidyverse"
 format: html
 editor: visual
-author: "Daniel Lip", "Pierre Chan", Howard Yeo", "Joel Koh", "Jolie Yeo" , "Danish Dol"
+author: "Daniel Lip, Pierre Chan, Howard Yeo, Joel Koh, Jolie Yeo, Danish Dol"
 ---
 
 # Task 1
 
 ```{r}
+#| label: Data Tidying Task 1
 library(tidyverse)
 library(readxl)
 library(waldo)
@@ -39,8 +40,10 @@ arr_df <- arrange(combined_df, name)
 arr_df <- drop_na(arr_df, gdp_per_capita)
 arr_df <- drop_na(arr_df, continent)
 
+# rename gdp column
 arr_df <- rename(arr_df, gdp_per_cap = gdp_per_capita)
 
+# compare with reference
 world_ref <- readr::read_csv("country_profiles_2019.csv")
 waldo::compare(arr_df, world_ref, tolerance = 1e-12)
 ```
@@ -48,6 +51,7 @@ waldo::compare(arr_df, world_ref, tolerance = 1e-12)
 # Task 2
 
 ```{R}
+#| label: Data Tidying Task 2
 #task 2.1
 year_row <- read_excel("outputFile.xlsx", sheet = "T4", range = "B11:BQ11", col_names = FALSE)
 years <- as.numeric(as.character(unlist(year_row)))
@@ -74,6 +78,7 @@ final_data_cleaned <- final_data %>% mutate(pop = if_else(age >= 70 & age <= 74,
 
 print(final_data_cleaned)
 
+# Compare with reference
 sg_ref <- readr::read_csv("sg_5yr_cohorts.csv", col_types = cols(sex = col_factor(levels = c("Male", "Female"))))
 waldo::compare(final_data_cleaned, sg_ref, tolerance = 1e-12)
 
@@ -82,10 +87,11 @@ waldo::compare(final_data_cleaned, sg_ref, tolerance = 1e-12)
 # Reflection
 
 1.  **Key takeaway:**
-    -   
+    -   I learned the importance of controlling column types explicitly when cleaning data in R. This stood out to me because I kept running into frustrating errors caused by automatic type inference in pivot_longer().
 2.  **Challenges:**
     -   Task 2.3 was the real challenge as it took me a while to understand what is it asking for initially i thought if n - n years exist use these and drop the years & over, and if does not exist such as 90 - 94, we were to convert 90 years & over to it.
 3.  **AI assistance:**
     -   Used AI tool for task 2.3 on understanding what the task wanted.
 4.  **Teamwork:**
+    -   My team worked together and shared suggestions to improve the working version of the code. One strength in our team is we openly share solutions. One area for improvement would be to utilize GitHub to track changes made which can improve our work efficiency.
 5.  **Additional feedback** *(optional)*:
