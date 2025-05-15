@@ -87,9 +87,9 @@ waldo::compare(final_data_cleaned, sg_ref, tolerance = 1e-12)
 # Reflection
 
 1.  **Key takeaway:**
-    -   I learned the importance of controlling column types explicitly when cleaning data in R. This stood out to me because I kept running into frustrating errors caused by automatic type inference in pivot_longer().
+    -   We learned the importance of controlling column types explicitly when cleaning data in R. This stood out because we kept running into frustrating errors caused by automatic type inference in pivot_longer().
 2.  **Challenges:**
-    -   Task 2.3 was the real challenge as it took me a while to understand what is it asking for initially i thought if n - n years exist use these and drop the years & over, and if does not exist such as 90 - 94, we were to convert 90 years & over to it.
+    -   Task 2.3 was the real challenge as it took me a while to understand what is it asking for initially we thought if n - n years exist use these and drop the years & over, and if does not exist such as 90 - 94, we were to convert 90 years & over to it.
 3.  **AI assistance:**
     -   Used AI tool for task 2.3 on understanding what the task wanted.
 4.  **Teamwork:**
