@@ -1,0 +1,27 @@
+---
+title: "tomato_week_3"
+author: "Joel"
+format: html
+editor: visual
+---
+
+
+
+```{r}
+
+
+
+```
+
+
+
+```{r}
+
+
+
+
+
+
+```
+
+
